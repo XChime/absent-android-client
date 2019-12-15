@@ -83,4 +83,4 @@ class UsersHelper(context : Context) : SQLiteOpenHelper(context, DATABASE_NAME,n
 
 }
 
-data class Users(var nik : String,var deviceID : String,var token : String)
+data class UsersModel(var nik : String,var deviceID : String,var token : String)

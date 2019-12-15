@@ -5,10 +5,32 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_alignParentBottom="true"
-            app:menu="@menu/dashboard_menu"
+        <com.google.android.material.tabs.TabLayout
+            android:padding="5dp"
+            android:id="@+id/dashTabs"
+            style="@style/Widget.MaterialComponents.TabLayout.Colored"
+            app:tabIndicatorHeight="3dp"
+            app:tabGravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_qr_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.tabs.TabItem
+                android:text="Summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.tabs.TabItem
+                android:text="History"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.tabs.TabLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:layout_below="@+id/dashTabs"
+            android:id="@+id/dashPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
     </RelativeLayout>
 </layout>

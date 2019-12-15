@@ -1,5 +1,6 @@
 package ml.dvnlabs.absenku.activity
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +17,7 @@ import ml.dvnlabs.absenku.util.network.NetworkRequest
 import ml.dvnlabs.absenku.util.network.listener
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.uiThread
 import org.json.JSONException
 import org.json.JSONObject
@@ -23,6 +25,7 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
     var bi: LoginActivityBinding? = null
     val usersHelper = UsersHelper(this)
+    var progress : ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,11 @@ class LoginActivity : AppCompatActivity() {
             bi!!.ButtonLogin.setOnClickListener {
                 requestLogin()
             }
+            progress = indeterminateProgressDialog (
+                message = "Loggining In...",
+                title = "Loading"
+            )
+            progress!!.hide()
         }
     }
 
@@ -52,13 +60,20 @@ class LoginActivity : AppCompatActivity() {
 
     private val listenerLogin : listener = object : listener{
         override fun onFetchComplete(data: String) {
+            progress!!.hide()
             val datas = JSONObject(data)
             try {
                 if (!datas.getBoolean("Error")){
                     Toast.makeText(this@LoginActivity,"Success Login!",Toast.LENGTH_SHORT).show()
                     writeUsers(InputNIK.text.toString(),"123",datas.getString("Data"))
                 }else{
-                    Toast.makeText(this@LoginActivity,datas.getString("Message"),Toast.LENGTH_LONG).show()
+                    alert{
+                        title = "Error"
+                        message = datas.getString("Message")
+                        positiveButton("OK"){
+                            it.dismiss()
+                        }
+                    }.show()
                 }
             }catch (e : JSONException) {
                 e.printStackTrace()
@@ -66,13 +81,18 @@ class LoginActivity : AppCompatActivity() {
         }
 
         override fun onFetchFailure(msg: String) {
+            progress!!.hide()
             alert {
+                positiveButton("OK"){
+                    it.dismiss()
+                }
                 title = "Error"
                 message = msg
             }.show()
         }
 
         override fun onFetchStart() {
+            progress!!.show()
             println("STARTING REQ")
         }
     }

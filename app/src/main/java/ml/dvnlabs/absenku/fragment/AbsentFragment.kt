@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,7 @@ class AbsentFragment : Fragment() {
         if (context?.let { ContextCompat.checkSelfPermission(it, Manifest.permission.CAMERA) }
             == PackageManager.PERMISSION_DENIED){
             val strMan = Array<String?>(1){Manifest.permission.CAMERA}
-            activity?.let { ActivityCompat.requestPermissions(it,strMan, 0x1) };
+            activity?.let { ActivityCompat.requestPermissions(it,strMan, 0x1) }
 
         }else{
             runQrCamera()
@@ -149,12 +150,12 @@ class AbsentFragment : Fragment() {
             val values = usersHelper!!.readUser()
             uiThread {
                 if (values != null) {
-                    val sisa= System.currentTimeMillis() - lastRequest
+                    val left= System.currentTimeMillis() - lastRequest
                     println("Now Timestamp: ${System.currentTimeMillis()} LastRequest: $lastRequest")
-                    println("Sisa $sisa")
+                    println("Sisa $left")
                     if (lastRequest == 0.toLong()){
                         requestAbsent(values,machine)
-                    }else if(sisa >= 5000.toLong() ){
+                    }else if(left >= 5000.toLong() ){
                         requestAbsent(values,machine)
                     }
                 }

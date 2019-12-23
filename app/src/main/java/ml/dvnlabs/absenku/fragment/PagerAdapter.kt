@@ -15,7 +15,7 @@ class PagerAdapter(fm : FragmentManager,numTabs : Int,context: Context) : Fragme
         return when(position){
             0 -> AbsentFragment()
             1 -> SummaryFragment()
-            2 -> SummaryFragment()
+            2 -> HistoryFragment()
             else-> null!!
         }
     }

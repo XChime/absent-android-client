@@ -1,12 +1,11 @@
 package ml.dvnlabs.absenku.util.network
 
 import android.content.Context
-import android.system.Os.listen
-import com.android.volley.AuthFailureError
-import com.android.volley.NoConnectionError
-import com.android.volley.Request
-import com.android.volley.Response
+import com.android.volley.*
+import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.StringRequest
+import org.json.JSONObject
+import java.io.UnsupportedEncodingException
 
 
 class NetworkRequest(context: Context, listener: listener, url : String, REQUEST_CODE : Int, params : HashMap<String,String>?) {
@@ -30,7 +29,7 @@ class NetworkRequest(context: Context, listener: listener, url : String, REQUEST
             if (it is NoConnectionError){
                 listener.onFetchFailure("No Connection!")
             }else{
-                listener.onFetchFailure(it.message!!)
+                it.message?.let { it1 -> listener.onFetchFailure(it1) }
             }
         })
         RequestQueue(context).addToRequestQueue(stringRequest.setShouldCache(false))
